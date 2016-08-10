@@ -23,11 +23,21 @@ except:
 f.close()
 
 
-def select(col):
+def str_select(col):
     like = '\'%' + input('Please enter \
 all or part of your president\'s {}: '.format(col)) + '%\''
     cur.execute("SELECT * FROM presidents WHERE LOWER({}) \
     LIKE LOWER({});".format(col, like))
+    x = cur.fetchall()
+    for item in x:
+        print(item)
+
+
+def yr_select():
+    yr = input('Please enter the year you would like to search: ')
+    cur.execute("SELECT * FROM presidents WHERE \
+    date_part('year',termStart) <= %s AND \
+    date_part('year',termEnd) >= %s", (yr, yr))
     x = cur.fetchall()
     for item in x:
         print(item)
@@ -44,16 +54,16 @@ def add():
 
 def search():
     criterion = input('Would you like to search by \
-[N]ame, [Y]ear, or [P]arty? ')
+    [N]ame, [Y]ear, or [P]arty? ')
     if criterion.lower() == 'n':
-        select('name')
+        str_select('name')
     if criterion.lower() == 'p':
-        select('party')
+        str_select('party')
+    if criterion.lower() == 'y':
+        yr_select()
 
 
 def main():
-
-    # cur.execute("SELECT * FROM presidents;")
     while True:
         print('Enter \'q\' to quit.')
         add_or_search = input("Would you like to [S]earch data \
