@@ -9,7 +9,7 @@ your database.
 ## Prerequisites
 To utilize this repository, you must first install <a href="https://eggerapps.at/postico/">Postico</a>
  and <a href="http://postgresapp.com/">Postgres</a> so that you can host PostgreSQL on your machine.
-
+You also must create a database named "test" before proceeding.
 
 ## Acknowledgements
  The data file used in this repository was is a csv containing data about the tenure of
