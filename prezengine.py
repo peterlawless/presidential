@@ -9,12 +9,28 @@ f = open('us-president-tenures.csv', 'r')
 reader = csv.reader(f)
 headers = next(reader)
 
-cur.execute("CREATE TABLE IF NOT EXISTS presidents (name VARCHAR, \
-             termStart DATE, termEnd DATE, party VARCHAR);")
+try:
+    cur.execute("CREATE TABLE presidents (name VARCHAR, termStart DATE, \
+    termEnd DATE, party VARCHAR);")
 
-cur.copy_from(f, 'presidents', sep=',', columns=headers)
+    cur.copy_from(f, 'presidents', sep=',', columns=headers)
+
+
+except:
+    conn.rollback()
+
 
 f.close()
+
+
+def select(col):
+    like = '\'%' + input('Please enter \
+all or part of your president\'s {}: '.format(col)) + '%\''
+    cur.execute("SELECT * FROM presidents WHERE LOWER({}) \
+    LIKE LOWER({});".format(col, like))
+    x = cur.fetchall()
+    for item in x:
+        print(item)
 
 
 def add():
@@ -28,8 +44,11 @@ def add():
 
 def search():
     criterion = input('Would you like to search by \
-[N]ame, [Y]ear, or [P]arty?')
-    pass
+[N]ame, [Y]ear, or [P]arty? ')
+    if criterion.lower() == 'n':
+        select('name')
+    if criterion.lower() == 'p':
+        select('party')
 
 
 def main():
